@@ -37,24 +37,23 @@ Plug 'kana/vim-textobj-syntax'
 Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'java']  } " 通过af选择整个函数 if 选择整个函数中的代码 e.g. vif选中函数中所有代码 daf 删除整个个函数
 
 
-" 其他
-Plug 'mbbill/undotree'                             " 文件修改记录 f5 打开撤销记录面板
-Plug 'morhetz/gruvbox'                             " 颜色主题
-Plug 'majutsushi/tagbar'                           " 代码分析，显示当前文件结构
-Plug 'scrooloose/nerdtree',{'on': 'NERDTreeToggle'} " 目录树 ctrl-n
-Plug 'gregsexton/gitv', {'on': ['Gitv']}           " git插件
-Plug 'tpope/vim-git'                               " gitv的依赖
-Plug 'tpope/vim-fugitive'                          " gitv的依赖
-                                                   " Plug 'w0rp/ale'                        " 代码动态检测
-Plug 'tpope/vim-unimpaired'                        " 多余的快捷键
-Plug 'ludovicchabant/vim-gutentags'                " 自动索引
-Plug 'Yggdroot/LeaderF'                            " 文件，标签，缓冲区直接丁文
-Plug 'mhinz/vim-signify'                           " 显示当前文件和仓库中的版本的差异
-                                                   " Plug 'Chiel92/vim-autoformat'
-Plug 'google/vim-codefmt'                          " 代码格式化
-Plug 'google/vim-maktaba'                          " codefmt的依赖
-Plug 'google/vim-glaive'                           " codefmt的依赖
-Plug 'tpope/vim-repeat'                            " 使用 . 重复插件的操作
+                                                                      " 其他
+Plug 'mbbill/undotree'                                                " 文件修改记录 f5 打开撤销记录面板
+Plug 'morhetz/gruvbox'                                                " 颜色主题
+Plug 'majutsushi/tagbar'                                              " 代码分析，显示当前文件结构
+Plug 'scrooloose/nerdtree',{'on': 'NERDTreeToggle'}                   " 目录树 ctrl-n
+Plug 'gregsexton/gitv', {'on': ['Gitv']}                              " git插件
+Plug 'tpope/vim-git'                                                  " gitv的依赖
+Plug 'tpope/vim-fugitive'                                             " gitv的依赖
+" Plug 'w0rp/ale'                                                     " 代码动态检测
+Plug 'tpope/vim-unimpaired'                                           " 多余的快捷键
+Plug 'ludovicchabant/vim-gutentags' , { 'for':['c', 'cpp', 'java']  } " 自动索引
+Plug 'Yggdroot/LeaderF'                                               " 文件，标签，缓冲区直接丁文
+Plug 'mhinz/vim-signify'                                              " 显示当前文件和仓库中的版本的差异
+Plug 'google/vim-codefmt'                                             " 代码格式化
+Plug 'google/vim-maktaba'                                             " codefmt的依赖
+Plug 'google/vim-glaive'                                              " codefmt的依赖
+Plug 'tpope/vim-repeat'                                               " 使用 . 重复插件的操作
 
 
 
