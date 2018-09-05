@@ -48,12 +48,14 @@ Plug 'tpope/vim-fugitive'                                             " gitv的�
 " Plug 'w0rp/ale'                                                     " 代码动态检测
 Plug 'tpope/vim-unimpaired'                                           " 多余的快捷键
 Plug 'ludovicchabant/vim-gutentags' , { 'for':['c', 'cpp', 'java']  } " 自动索引
-Plug 'Yggdroot/LeaderF'                                               " 文件，标签，缓冲区直接丁文
+Plug 'Yggdroot/LeaderF'                                               " 文件，标签，缓冲区搜索
 Plug 'mhinz/vim-signify'                                              " 显示当前文件和仓库中的版本的差异
 Plug 'google/vim-codefmt'                                             " 代码格式化
 Plug 'google/vim-maktaba'                                             " codefmt的依赖
 Plug 'google/vim-glaive'                                              " codefmt的依赖
 Plug 'tpope/vim-repeat'                                               " 使用 . 重复插件的操作
+Plug 'Karmenzind/vim-tmuxlike'
+Plug 't9md/vim-choosewin'
 
 
 
@@ -64,106 +66,54 @@ Plug 'guns/vim-clojure-highlight'
 
 call plug#end()            " 必须
 
-"根据文件类型加载插件和相关脚本
-filetype plugin indent on    
-"设置字体 只要有gvim需要
-" set guifont=Inziu\ Iosevka\ SC:h14
-" 搜索不区分大小写，但是当输入有大小写时使用大小写敏感匹配
-set ignorecase smartcase
-" 光标处字符加下划线
-highlight MatchParen cterm=underline ctermbg=NONE ctermfg=NONE
-"输入的命令显示出来，看的清楚些
-set showcmd
-"设定窗口位置
-"winpos 500 200
-"set cmdheight=1     " 命令行（在状态行下）的高度，设置为1
-"在标尺显示当前光标的位置
-set ruler
-"高亮当前行
-set cursorline
-"高亮当前列
-set cursorcolumn
-"设置魔术
-set magic
-" 光标移动到buffer的顶部和底部时保持3行距离
-set scrolloff=3
-"是否用空格代替制表符
-"set noexpandtab
-set expandtab
-"在行和段开始处用制表符
-set smarttab
-" Tab键的宽度
-set tabstop=4
-"统一缩进为4
-set softtabstop=4
+                           " vim setting
+set ttyfast
+filetype plugin indent on  " 根据文件类型加载插件和相关脚本
+set ignorecase smartcase   " 搜索不区分大小写，但是当输入有大小写时使用大小写敏感匹配
+"highlight MatchParen cterm=underline ctermbg=NONE ctermfg=NONE " 光标处字符加下划线
+set showcmd                " 在屏幕底段显示命令
+set ruler                  " 在标尺显示当前光标的位置
+set cursorline             " 高亮当前行
+set cursorcolumn           " 高亮当前列
+set scrolloff=4            " 光标移动到buffer的顶部和底部时保持3行距离
+set expandtab              " 空格代替制表符
+set smarttab               " 在行和段开始处用制表符
+set tabstop=4              " Tab键的宽度
+set softtabstop=4          " 统一缩进为4
 set shiftwidth=4
-" 显示行号
-set nu
-" 历史记录数
-set history=1000
-"set guifont=Inziu_Iosevka_SC:h12
-
-
-set helplang=cn
-set encoding=utf-8
-"set ambiwidth=double "防止特殊符号无法显示
-"关闭vim中的错误提示音
-set vb t_vb=
-"set noeb
-"设置主题配色
-"colorscheme solarized
-"colorscheme default
-"colorscheme ron
-colorscheme gruvbox
+set nu                     " 显示行号
+set t_Co=256               " 开启256色
+set relativenumber
+set history=1000           " 历史记录数
+set helplang=cn            " 帮助文档语言
+set encoding=utf-8         " 文件编码
+set vb t_vb=               " 关闭vim中的错误响铃和闪烁
+colorscheme gruvbox        " 设置主题配色
 set background=dark
-"将leader键改为","
-"let mapleader = ","
-"语法高亮
-syntax enable
-syntax on
+let mapleader = ","        " 将leader键改为","
+syntax on                  " 语法高亮
+set fileformat=unix        " 使用 unix 行结束符
+set autowrite              " 自动保存
+set laststatus=2           " 总是显示状态行
+set backspace=indent,start " 使用回格键（backspace）正常处理indent，eol，start等
+set confirm                " 在处理未保存或只读文件时弹出确认
+set cindent                " c语言缩进风格
+set autoindent             " 自动缩进
+set smartindent            " 当遇到右花括号时取消缩进形式
+set noswapfile             " 禁用交换文件
+set showmatch              " 高亮显示匹配括号
 
-"我也不知道是什么，大概是在行尾显示$符号？
-set list
-"替换 tab 键和行尾？
-set listchars=tab:>-
-"使用 unix 行结束符
-set fileformat=unix
-"自动缩进c风格
-"set cindent
-"set autoindent
-"禁止生成临时文件
-"if has("vms")
-"    set nobackup
-"else
-"    set backup
-"endif
-"set noswapfile
-"自动保存
-set autowrite
-"总是显示状态行
-set laststatus=2
-"使用回格键（backspace）正常处理indent，eol，start等
-set backspace=indent,start
-"高亮显示匹配括号有rainbow_parentheses插件后不需要了
-"set showmatch
-"隐藏工具栏
-"set guioptions-=T
-""隐藏菜单栏
-"set guioptions-=m
-"在处理未保存或只读文件时弹出确认
-set confirm
-"共享剪贴板
-"set clipboard+=unnamed
 " 插入模式下直接另起一行并移动到行首(<S-CR>只在gvim中起作用，终端中无法识别)
 if has("gui_running")
     inoremap <S-CR> <Esc>o
-else
-    inoremap <C-l> <Esc>o
-endif
+                           " set guioptions-=T "  隐藏工具栏
+                           " set guioptions-=m " 隐藏菜单栏
+                           " set clipboard+=unnamed " 共享剪贴板
 " gvim下用c-6替换c-],programming dvorak布局在win下的gui程序中输入的c-]会变成
 " c-6,估计c-6是c-^的别名，所以将c-^映射到c-]就能解决问题
-if has("gui_running") 
     nnoremap <c-^> <c-]>
+else
+    inoremap <C-l> <Esc>o
 endif
 
 "set statusline=%F%m%r%h%w%=%<\ [%Y]\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\"\":\"\").\"]\"}\ [%{&ff}]\ [asc=%03.3b]\ [hex=%02.2B]\ [%04l(%L),%04v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}
@@ -433,6 +383,10 @@ augroup autoformat_settings
     " Alternative: autocmd FileType python AutoFormatBuffer autopep8
 augroup END
 
-if exists('$TMUX')
-    set term=screen-256color
-endif
+" vim-tmuxlike
+nmap <c-\> <Plug>(tmuxlike-prefix)
+
+map <c-up>  :res+5<cr>
+map <c-down> :res-5<cr>
+map <c-left> :vertical res-5<cr>
+map <c-right> :vertical res+5<cr>
