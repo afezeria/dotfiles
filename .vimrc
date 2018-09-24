@@ -10,6 +10,8 @@ Plug 'elzr/vim-json'                  " 更好的json高亮
 Plug 'kien/rainbow_parentheses.vim'   " 彩虹括号
 Plug 'vim-airline/vim-airline'        " 底部状态栏
 Plug 'vim-airline/vim-airline-themes' " 底部状态栏颜色主题
+Plug 'Yggdroot/indentLine'            " 在代码缩进处显示竖直虚线 
+Plug 'airblade/vim-gitgutter'         " 显示git项目的修改内容
 
 " 查找
 "Plug 'kien/ctrlp.vim'                      " 当前项目中 文件查找 ctrl-p
@@ -37,7 +39,7 @@ Plug 'kana/vim-textobj-syntax'
 Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'java']  } " 通过af选择整个函数 if 选择整个函数中的代码 e.g. vif选中函数中所有代码 daf 删除整个个函数
 
 
-                                                                      " 其他
+" 其他
 Plug 'mbbill/undotree'                                                " 文件修改记录 f5 打开撤销记录面板
 Plug 'morhetz/gruvbox'                                                " 颜色主题
 Plug 'majutsushi/tagbar'                                              " 代码分析，显示当前文件结构
@@ -56,6 +58,7 @@ Plug 'google/vim-glaive'                                              " codefmt�
 Plug 'tpope/vim-repeat'                                               " 使用 . 重复插件的操作
 Plug 'Karmenzind/vim-tmuxlike'
 Plug 't9md/vim-choosewin'
+Plug 'tpope/vim-sensible'                                             " 一些默认设置
 
 
 
@@ -72,10 +75,10 @@ filetype plugin indent on  " 根据文件类型加载插件和相关脚本
 set ignorecase smartcase   " 搜索不区分大小写，但是当输入有大小写时使用大小写敏感匹配
 "highlight MatchParen cterm=underline ctermbg=NONE ctermfg=NONE " 光标处字符加下划线
 set showcmd                " 在屏幕底段显示命令
-set ruler                  " 在标尺显示当前光标的位置
-set cursorline             " 高亮当前行
-set cursorcolumn           " 高亮当前列
-set scrolloff=4            " 光标移动到buffer的顶部和底部时保持3行距离
+"set ruler                  " 在标尺显示当前光标的位置
+" set cursorline             " 高亮当前行
+" set cursorcolumn           " 高亮当前列
+set scrolloff=2            " 光标移动到buffer的顶部和底部时保持3行距离
 set expandtab              " 空格代替制表符
 set smarttab               " 在行和段开始处用制表符
 set tabstop=4              " Tab键的宽度
@@ -83,7 +86,7 @@ set softtabstop=4          " 统一缩进为4
 set shiftwidth=4
 set nu                     " 显示行号
 set t_Co=256               " 开启256色
-set relativenumber
+" set relativenumber         " 相对行号
 set history=1000           " 历史记录数
 set helplang=cn            " 帮助文档语言
 set encoding=utf-8         " 文件编码
@@ -266,7 +269,7 @@ let g:EasyMotion_smartcase = 1
 " Smartsign (type `3` and match `3`&`#`)
 let g:EasyMotion_use_smartsign_us = 1
 " keep cursor column when JK motion
-let g:EasyMotion_startofline = 0 
+" let g:EasyMotion_startofline = 0 
 " <Leader>f{char} to move to {char} 当前屏幕内跳转到字符
 " map  <Leader>f <Plug>(easymotion-bd-f)
 " nmap <Leader>f <Plug>(easymotion-overwin-f)
@@ -339,22 +342,22 @@ endif
 " LeaderF
 let g:Lf_ShortcutF = '<c-p>'
 "let g:Lf_ShortcutB = '<c-s>' 和下面的c-b功能相同但不知道为什么会卡死
-noremap <c-m> :LeaderfMru<cr>
+"noremap <c-m> :LeaderfMru<cr>
 " 打开函数列表,m-p快捷键被其他插件占用了
-"noremap <m-p> :LeaderfFunction!<cr>
-noremap <c-f> :LeaderfFunction!<cr>
-noremap <c-b> :LeaderfBuffer<cr>
-noremap <c-t> :LeaderfTag<cr>
+noremap <m-p> :LeaderfFunction!<cr>
+ noremap <c-f> :LeaderfFunction!<cr>
+ noremap <c-b> :LeaderfBuffer<cr>
+ noremap <c-t> :LeaderfTag<cr>
 let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': ''   }
 
-let g:Lf_RootMarkers = ['.project', '.root', '.svn', '.git']
-let g:Lf_WorkingDirectoryMode = 'Ac'
-let g:Lf_WindowHeight = 0.30
-let g:Lf_CacheDirectory = expand('~/.vim/cache')
-let g:Lf_ShowRelativePath = 0
-let g:Lf_HideHelp = 1
-let g:Lf_StlColorscheme = 'powerline'
-let g:Lf_PreviewResult = {'Function':0, 'BufTag':0}
+ let g:Lf_RootMarkers = ['.project', '.root', '.svn', '.git']
+ let g:Lf_WorkingDirectoryMode = 'Ac'
+ let g:Lf_WindowHeight = 0.30
+ let g:Lf_CacheDirectory = expand('~/.vim/cache')
+ let g:Lf_ShowRelativePath = 0
+ let g:Lf_HideHelp = 1
+ let g:Lf_StlColorscheme = 'powerline'
+ let g:Lf_PreviewResult = {'Function':0, 'BufTag':0}
 
 
 " vim-autoformat
@@ -362,7 +365,7 @@ let g:Lf_PreviewResult = {'Function':0, 'BufTag':0}
 " let g:autoformat_verbosemode=1
 
 " json 格式化
-"command! JsonFormat :execute '%!python -m json.tool'
+command! JsonFormat :execute '%!python -m json.tool'
 
 " vim-expand-region
 map - <Plug>(expand_region_shrink)
@@ -390,3 +393,13 @@ map <c-up>  :res+5<cr>
 map <c-down> :res-5<cr>
 map <c-left> :vertical res-5<cr>
 map <c-right> :vertical res+5<cr>
+
+" auto-pairs
+let g:AutoPairsFlyMode=1
+let g:AutoPairsShortcutBackInsert = '<M-b>'
+
+" indentLine
+let g:indentLine_setColors = 0
+let g:indentLine_char='┆'
+
+
