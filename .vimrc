@@ -59,7 +59,8 @@ Plug 'tpope/vim-repeat'                                               " 使用 .
 Plug 'Karmenzind/vim-tmuxlike'
 Plug 't9md/vim-choosewin'
 Plug 'tpope/vim-sensible'                                             " 一些默认设置
-
+Plug 'dhruvasagar/vim-table-mode'                                     " 画表格
+Plug 'vim-scripts/DrawIt'                                             " 画图
 
 
 " Clojure plugins
@@ -69,7 +70,7 @@ Plug 'guns/vim-clojure-highlight'
 
 call plug#end()            " 必须
 
-                           " vim setting
+" vim setting
 set ttyfast
 filetype plugin indent on  " 根据文件类型加载插件和相关脚本
 set ignorecase smartcase   " 搜索不区分大小写，但是当输入有大小写时使用大小写敏感匹配
@@ -105,6 +106,33 @@ set autoindent             " 自动缩进
 set smartindent            " 当遇到右花括号时取消缩进形式
 set noswapfile             " 禁用交换文件
 set showmatch              " 高亮显示匹配括号
+set nohlsearch             " 不高亮显示搜索
+
+" Quit visual mode
+vnoremap v <Esc>
+
+" Yank to the end of line
+" nnoremap Y 0y$
+nnoremap Y Vy
+
+" Auto indent pasted text
+nnoremap P p==
+
+" Move to the start of line
+nnoremap H ^
+
+" Move to the end of line
+nnoremap L $
+
+inoremap jj <Esc>
+inoremap jk <Esc>
+inoremap kk <Esc>
+
+" java代码补全
+inoremap sout System.out.println()<Esc>i
+inoremap psvm public static void main(String[] args) {<Enter>}<Esc>ko
+inoremap psf public static final
+
 
 " 插入模式下直接另起一行并移动到行首(<S-CR>只在gvim中起作用，终端中无法识别)
 if has("gui_running")
@@ -401,5 +429,4 @@ let g:AutoPairsShortcutBackInsert = '<M-b>'
 " indentLine
 let g:indentLine_setColors = 0
 let g:indentLine_char='┆'
-
 
