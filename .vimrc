@@ -25,8 +25,9 @@ Plug 'easymotion/vim-easymotion'           " 当前文件中快速跳转 incsear
 " 注释插件
 Plug 'tpope/vim-commentary'         " 快速注释 normal模式按gc配合其他移动键注释
 Plug 'scrooloose/nerdcommenter'     " 快速注释 insert模式C-c注释单行
-Plug 'tyru/caw.vim'                 " 提供根据文件类型注释
-Plug 'Shougo/context_filetype.vim'  " 提供依赖上下文的注释，方便在html中注释js代码
+" 没卵用
+" Plug 'tyru/caw.vim'                 " 提供根据文件类型注释
+" Plug 'Shougo/context_filetype.vim'  " 提供依赖上下文的注释，方便在html中注释js代码
 
 
 " 快速操作
@@ -151,11 +152,6 @@ nnoremap L $
 inoremap jj <Esc>
 inoremap jk <Esc>
 inoremap kk <Esc>
-
-" java代码补全
-inoremap sout System.out.println()<Esc>i
-inoremap psvm public static void main(String[] args) {<Enter>}<Esc>ko
-inoremap psf public static final
 
 " 插入模式下直接另起一行并移动到行首(<S-CR>只在gvim中起作用，终端中无法识别)
 if has("gui_running")
@@ -463,8 +459,5 @@ autocmd FileType clojure set commentstring=;\ %s
 autocmd FileType java,c,cpp set commentstring=//\ %s
 autocmd FileType sql set commentstring=--\ %s
 
-" if (&filetype == "html")
-"   set isk=@,48-57,_,192-255,58,-,$
-" endif
 autocmd FileType html set isk=@,48-57,_,192-255,58,-,$
-
+autocmd FileType java source ~/.vim/java.vim
