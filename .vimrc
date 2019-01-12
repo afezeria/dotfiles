@@ -1,13 +1,7 @@
-set nocompatible               " be iMproved
-set encoding=utf-8         " 文件编码
-set guifont=Inziu\ Iosevka\ SC:h14
-"filetype off                   " required!
-
+" 插件列表 ----------------------------------- {{{
 
 call plug#begin('~/.vim/plugged')
 
-
-" Plugins
 " 显示
 Plug 'elzr/vim-json'                " 更好的json高亮
 Plug 'kien/rainbow_parentheses.vim' " 彩虹括号
@@ -23,10 +17,10 @@ Plug 'haya14busa/incsearch-easymotion.vim' " incsearch的扩展 提供跳转功�
 Plug 'easymotion/vim-easymotion'           " 当前文件中快速跳转 incsearch-easymotion.vim插件依赖该插件 开始匹配后按tab向后翻页 s-tab向前翻页
 
 " 注释插件
-Plug 'tpope/vim-commentary'         " 快速注释 normal模式按gc配合其他移动键注释
 Plug 'scrooloose/nerdcommenter'     " 快速注释 insert模式C-c注释单行
-" 没卵用
+Plug 'tomtom/tcomment_vim'  
 " Plug 'tyru/caw.vim'                 " 提供根据文件类型注释
+" 装了后没有用，并不能正确的再html中注释js，鬼知道为什么
 " Plug 'Shougo/context_filetype.vim'  " 提供依赖上下文的注释，方便在html中注释js代码
 
 
@@ -58,14 +52,15 @@ Plug 'Valloric/MatchTagAlways' " 高亮标签
 Plug 'sheerun/vim-polyglot'
 
 " 其他
+" Plug 'ludovicchabant/vim-gutentags'                " 自动索引
+" Plug 'mhinz/vim-signify'                           " 显示当前文件和仓库中的版本的差异
+Plug 'tpope/vim-fugitive'                          " git插件
 Plug 'mbbill/undotree'                             " 文件修改记录 f5 打开撤销记录面板
 Plug 'morhetz/gruvbox'                             " 颜色主题
 Plug 'majutsushi/tagbar'                           " 代码分析，显示当前文件结构
 Plug 'scrooloose/nerdtree',{'on':'NERDTreeToggle'} " 目录树 ctrl-n
 Plug 'tpope/vim-unimpaired'                        " 多余的快捷键
-" Plug 'ludovicchabant/vim-gutentags'                " 自动索引
 Plug 'Yggdroot/LeaderF'                            " 文件，标签，缓冲区直接定位
-" Plug 'mhinz/vim-signify'                           " 显示当前文件和仓库中的版本的差异
 Plug 'google/vim-codefmt'                          " 代码格式化
 Plug 'google/vim-maktaba'                          " codefmt的依赖
 Plug 'google/vim-glaive'                           " codefmt的依赖
@@ -74,6 +69,7 @@ Plug 'Karmenzind/vim-tmuxlike'                     " 仿tmux操作
 Plug 'dhruvasagar/vim-table-mode'                  " 画表格
 Plug 'vim-scripts/DrawIt'                          " 画图
 Plug 'ervandew/supertab'                           " tab 补全
+Plug 'itchyny/vim-gitbranch'                       " 在状态栏中显示分支名称
 
 
 " Clojure plugins
@@ -86,19 +82,25 @@ Plug 'udalov/kotlin-vim'
 
 call plug#end()            " 必须
 
-set ttyfast
+" }}}
+
+" 基础选项设置 ---------------------------- {{{
+
+set nocompatible               " 关闭vi兼容模式
+set encoding=utf-8         " 文件编码
+set guifont=Inziu\ Iosevka\ SC:h14 " 字体
+set ttyfast         " 使用快速终端连接
 filetype plugin indent on  " 根据文件类型加载插件和相关脚本
 set ignorecase smartcase   " 搜索不区分大小写，但是当输入有大小写时使用大小写敏感匹配
-"highlight MatchParen cterm=underline ctermbg=NONE ctermfg=NONE " 光标处字符加下划线
 set showcmd                " 在屏幕底段显示命令
-" set ruler                  " 在标尺显示当前光标的位置
 set scrolloff=4            " 光标移动到buffer的顶部和底部时保持3行距离
+set textwidth=100 " 插入文本的最大宽度
 set expandtab              " 空格代替制表符
 set smarttab               " 在行和段开始处用制表符
 set tabstop=2              " Tab键的宽度
 set softtabstop=2          " 统一缩进为2
 set shiftwidth=2
-set nu                     " 显示行号
+set number        " 显示行号
 set t_Co=256               " 开启256色
 set history=1000           " 历史记录数
 set helplang=cn            " 帮助文档语言
@@ -117,61 +119,120 @@ set autoindent             " 自动缩进
 set smartindent            " 当遇到右花括号时取消缩进形式
 set noswapfile             " 禁用交换文件
 set showmatch              " 高亮显示匹配括号
-
-imap <c-s> <Esc>:w<CR>a
-nmap <c-s> :w<CR>
-
-" set wildmode=longest,list,full
+set foldmethod=marker " 设置折叠模式
+set foldcolumn=2 " 设置折叠栏宽度
+" set foldlevel=100 " 启动vim时不折叠
 set wildmenu               " 状态栏自动补全
 
-" 保存文件动作忽略大小写
-command WQ wq
-command Wq wq
-command W w              
-command Q q
+" 打开vim时自动跳转到上次离开的位置
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+" }}}
 
-"""
+" 基础映射 ------------------------------- {{{
 
-" Quit visual mode
+" 单词转大写
+" inoremap <c-u> <esc>bgUwwa
+" nnoremap <c-u> gUiw
+" 纵向打开配置文件
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+" 重新加载配置文件
+nnoremap <leader>sv :source $MYVIMRC<cr>
+" 普通模式下按\n取消搜索后的高亮显示
+nnoremap \n :noh<cr>
+" 按v退出可视模式
 vnoremap v <Esc>
-
-" Yank to the end of line
-" nnoremap Y 0y$
+" 复制整行
 nnoremap Y Vy
-
-" Auto indent pasted text
+" 粘贴并缩进
 nnoremap P p==
-
-" Move to the start of line
+" 跳到行首
 nnoremap H ^
-
-" Move to the end of line
+" 跳到行尾
 nnoremap L $
-
-" Quit insert mode
+" 退出插入模式
 inoremap jj <Esc>
 inoremap jk <Esc>
 inoremap kk <Esc>
+" 调整窗口大小
+nnoremap <c-up>  :res+5<cr>
+nnoremap <c-down> :res-5<cr>
+nnoremap <c-left> :vertical res-5<cr>
+nnoremap <c-right> :vertical res+5<cr>
 
-" 插入模式下直接另起一行并移动到行首(<S-CR>只在gvim中起作用，终端中无法识别)
+" }}}
+
+" gui相关 ------------------------------------ {{{
+
 if has("gui_running")
-    inoremap <S-CR> <Esc>o
-    set guioptions-=T "  隐藏工具栏
-    set guioptions-=m " 隐藏菜单栏
-    set clipboard+=unnamed " 共享剪贴板
-    set relativenumber       " 相对行号
-    set cursorline             " 高亮当前行 性能影响较大
-    set cursorcolumn           " 高亮当前列
-    " gvim下用c-6替换c-],programming dvorak布局在win下的gui程序中输入的c-]会变成
-    " c-6,估计c-6是c-^的别名，所以将c-^映射到c-]就能解决问题
-    nnoremap <c-^> <c-]>
+  set guioptions-=T      "  隐藏工具栏
+  set guioptions-=m      " 隐藏菜单栏
+  set clipboard+=unnamed " 共享剪贴板
+  set relativenumber     " 相对行号
+  set cursorline         " 高亮当前行 性能影响较大
+  set cursorcolumn       " 高亮当前列
+  "设定窗口位置
+  "winpos 500 200
+  " 插入模式下直接另起一行并移动到行首(<S-CR>只在gvim中起作用，终端中无法识别)
+  inoremap <S-CR> <Esc>o  
+  " ctrl-s 保存文件
+  inoremap <c-s> <Esc>:w<CR>a
+  nnoremap <c-s> :w<CR>
+  " gvim下用c-6替换c-],programming dvorak布局在win下的gui程序中输入的c-]会变成
+  " c-6,估计c-6是c-^的别名，所以将c-^映射到c-]就能解决问题
+  nnoremap <c-^> <c-]>
 else
-    inoremap <C-l> <Esc>o
+  inoremap <C-l> <Esc>o
 endif
-"设定窗口位置
-"winpos 500 200
 
-"set statusline=%F%m%r%h%w%=%<\ [%Y]\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\"\":\"\").\"]\"}\ [%{&ff}]\ [asc=%03.3b]\ [hex=%02.2B]\ [%04l(%L),%04v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}
+" 在windows下从insert模式离开时切换至英文输入法
+" 需要从github下载im-select.exe
+" https://github.com/daipeihust/im-select
+" 获取当前输入法的常量值
+" d:\im-select.exe 
+" 用输入法的常量值locale作为参数，执行命令就能切换至指定输入法
+" d:\im-select.exe locale
+" windows系统不自带uname命令，需要安装gow以获取uname命令
+" https://github.com/bmatzelle/gow
+" windows有bug，替换中文输入法的layout file为kbddvp.dll后
+" 有时切换输入法时，会导致布局变成qwerty，无法复现
+" 碰到这种情况再次切换输入法就恢复了
+" 微软中文输入法注册表位置
+" Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layouts\00000804
+if has('win32')
+    " autocmd InsertLeave * execute "!start /b g:\\sysTool\\switch-im\\im-select.exe 1033"
+      autocmd InsertLeave * execute system("g:\\sysTool\\switch-im\\im-select.exe 1033")
+endif
+
+" }}}
+
+" 根据文件类型加载具体配置文件 ----------------------- {{{
+
+autocmd FileType html set iskeyword=@,48-57,_,192-255,58,-,$
+autocmd FileType java source ~/.vim/java.vim
+autocmd VimEnter * source ~/.vim/command.vim
+
+" }}}
+
+let g:lightline = {
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+      \   'right': [ [ 'lineinfo' ],
+      \              [ 'percent' ],
+      \              [ 'fileformat', 'fileencoding', 'filetype',
+      \                 'charvaluehex', 'numberOfLinesInBuffer' ] ]
+      \ },
+      \ 'component_function':{
+      \   'gitbranch': 'fugitive#head',
+      \ },
+      \ 'component': {
+      \   'charvaluehex': '0x%B',
+      \   'numberOfLinesInBuffer': '%L',
+      \ },
+      \ }
+" set statusline=%F%m%r%h%w%=%<\ [%Y]\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\"\":\"\").\"]\"}\ [%{&ff}]\ [asc=%03.3b]\ [hex=%02.2B]\ [%04l(%L),%04v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}
 
 
  " Rainbow Parentheses
@@ -253,8 +314,6 @@ vmap * <Plug>AgActionVisual
     "gagi' to search the words inside single quotes.
 "Visual Mode
     "gag to search the selected text
-" 普通模式下按\n取消搜索后的高亮显示
-nmap \n :noh<cr>
 
 " nerdcommenter
 " Add spaces after comment delimiters by default
@@ -275,15 +334,6 @@ imap <C-c> <plug>NERDCommenterInsert
 nmap <C-c> <plug>NERDCommenterToggle
 
 
-" sneak
-"let g:sneak#label = 1
-"let g:sneak#use_ic_scs = 1
-
-" " incsearch
-" map /  <Plug>(incsearch-forward)
-" map ?  <Plug>(incsearch-backward)
-" map g/ <Plug>(incsearch-stay)
-
 " incsearch-fuzzy
 " 模糊查找
 " map z/ <Plug>(incsearch-fuzzy-/)
@@ -297,7 +347,7 @@ nmap <C-c> <plug>NERDCommenterToggle
 "map / <Plug>(incsearch-easymotion-/)
 "map ? <Plug>(incsearch-easymotion-?)
 "map g/ <Plug>(incsearch-easymotion-stay)
-"
+
 " incsearch.vim x fuzzy x vim-easymotion
 " 模糊查找+跳转
 function! s:config_easyfuzzymotion(...) abort
@@ -382,16 +432,6 @@ endif
 " "" 将自动生成的 tags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
 " let s:vim_tags = expand('~/.cache/tags')
 " let g:gutentags_cache_dir = s:vim_tags
-"
-" " 配置 ctags 的参数
-" let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
-" let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
-" let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
-" "
-" " " 检测 ~/.cache/tags 不存在就新建
-" if !isdirectory(s:vim_tags)
-"     silent! call mkdir(s:vim_tags, 'p')
-" endif
 
 " LeaderF
 let g:Lf_ShortcutF = '<c-p>'
@@ -419,7 +459,7 @@ let g:Lf_PreviewResult = {'Function':0, 'BufTag':0}
 
 " vim-expand-region
 " - 号缩小选中区域
-map - <Plug>(expand_region_shrink)
+nnoremap - <Plug>(expand_region_shrink)
 
 " google-codefmt windows下 clang-format js-beautify没法装
 " call glaive#Install()
@@ -438,12 +478,10 @@ map - <Plug>(expand_region_shrink)
 " augroup END
 
 " vim-tmuxlike
-nmap <c-\> <Plug>(tmuxlike-prefix)
+" nmap <c-\> <Plug>(tmuxlike-prefix)
+" nmap <Leader><Leader> <Plug>(tmuxlike-prefix)
 
-map <c-up>  :res+5<cr>
-map <c-down> :res-5<cr>
-map <c-left> :vertical res-5<cr>
-map <c-right> :vertical res+5<cr>
+
 
 " auto-pairs
 let g:AutoPairsFlyMode = 1
@@ -453,11 +491,3 @@ let g:AutoPairsShortcutBackInsert = '<M-b>'
 let g:indentLine_setColors = 0
 let g:indentLine_char='┆'
 
-" vim-commentary
-autocmd FileType python,shell,coffee set commentstring=#\ %s
-autocmd FileType clojure set commentstring=;\ %s
-autocmd FileType java,c,cpp set commentstring=//\ %s
-autocmd FileType sql set commentstring=--\ %s
-
-autocmd FileType html set isk=@,48-57,_,192-255,58,-,$
-autocmd FileType java source ~/.vim/java.vim
