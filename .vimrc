@@ -10,7 +10,7 @@ Plug 'Yggdroot/indentLine'          " 在代码缩进处显示竖直虚线
 
 " 查找
 " Plug 'rking/ag.vim'                        " 当前目录下 内容搜索 :Ag 或者 选中单词后nhrmal模式\A
-Plug 'Chun-Yang/vim-action-ag'             " 当前目录下 类容搜索，
+" Plug 'Chun-Yang/vim-action-ag'             " 当前目录下 类容搜索，
 Plug 'haya14busa/incsearch.vim'            " 当前文件中 增强vim自带的 ? 和 / 搜索
 Plug 'haya14busa/incsearch-fuzzy.vim'      " incsearch的扩展 添加模糊匹配
 Plug 'haya14busa/incsearch-easymotion.vim' " incsearch的扩展 提供跳转功能
@@ -61,9 +61,6 @@ Plug 'majutsushi/tagbar'                           " 代码分析，显示当前
 Plug 'scrooloose/nerdtree',{'on':'NERDTreeToggle'} " 目录树 ctrl-n
 Plug 'tpope/vim-unimpaired'                        " 多余的快捷键
 Plug 'Yggdroot/LeaderF'                            " 文件，标签，缓冲区直接定位
-Plug 'google/vim-codefmt'                          " 代码格式化
-Plug 'google/vim-maktaba'                          " codefmt的依赖
-Plug 'google/vim-glaive'                           " codefmt的依赖
 Plug 'tpope/vim-repeat'                            " 使用 . 重复插件的操作
 Plug 'Karmenzind/vim-tmuxlike'                     " 仿tmux操作
 Plug 'dhruvasagar/vim-table-mode'                  " 画表格
@@ -71,6 +68,10 @@ Plug 'vim-scripts/DrawIt'                          " 画图
 Plug 'ervandew/supertab'                           " tab 补全
 Plug 'itchyny/vim-gitbranch'                       " 在状态栏中显示分支名称
 
+" 格式化
+Plug 'google/vim-codefmt'                          " 代码格式化
+Plug 'google/vim-maktaba'                          " codefmt的依赖
+Plug 'google/vim-glaive'                           " codefmt的依赖
 
 " Clojure plugins
 " Plug 'tpope/vim-fireplace'
@@ -186,6 +187,11 @@ else
   inoremap <C-l> <Esc>o
 endif
 
+" }}}
+
+" 平台相关 -------------------------------{{{
+
+" 算了，还是手动切换把，win10那个bug太烦人了
 " 在windows下从insert模式离开时切换至英文输入法
 " 需要从github下载im-select.exe
 " https://github.com/daipeihust/im-select
@@ -201,8 +207,11 @@ endif
 " 微软中文输入法注册表位置
 " Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layouts\00000804
 if has('win32')
-    " autocmd InsertLeave * execute "!start /b g:\\sysTool\\switch-im\\im-select.exe 1033"
-      autocmd InsertLeave * execute system("g:\\sysTool\\switch-im\\im-select.exe 1033")
+  " autocmd InsertLeave * execute "!start /b g:\\sysTool\\switch-im\\im-select.exe 1033"
+  " autocmd InsertLeave * execute system("g:\\sysTool\\switch-im\\im-select.exe 1033")
+  set pythonthreedll=G:\Scoop\apps\python\3.7.1\python37.dll
+  set shell=cmd
+  set shellcmdflag=/c
 endif
 
 " }}}
@@ -211,10 +220,16 @@ endif
 
 autocmd FileType html set iskeyword=@,48-57,_,192-255,58,-,$
 autocmd FileType java source ~/.vim/java.vim
-autocmd VimEnter * source ~/.vim/command.vim
+" autocmd! FileType java iabbrev psvm public static void main(String[] args){<Enter>}<esc>ka
+" autocmd VimEnter * source ~/.vim/command.vim
+command! WQ wq
+command! Wq wq
+command! W w
+command! Q q
 
 " }}}
 
+" 状态栏属性 (itchyny/lightline.vim)--------------------{{{
 let g:lightline = {
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
@@ -232,10 +247,9 @@ let g:lightline = {
       \   'numberOfLinesInBuffer': '%L',
       \ },
       \ }
-" set statusline=%F%m%r%h%w%=%<\ [%Y]\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\"\":\"\").\"]\"}\ [%{&ff}]\ [asc=%03.3b]\ [hex=%02.2B]\ [%04l(%L),%04v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}
+" }}}
 
-
- " Rainbow Parentheses
+" 彩虹括号 (kien/rainbow_parentheses.vim)--------------------{{{
  let g:rbpt_colorpairs = [
      \ ['brown',       'RoyalBlue3'],
      \ ['Darkblue',    'SeaGreen3'],
@@ -262,15 +276,17 @@ let g:lightline = {
  au Syntax * RainbowParenthesesLoadRound
  au Syntax * RainbowParenthesesLoadSquare
  au Syntax * RainbowParenthesesLoadBraces
+" }}} 
 
 " Evaluate Clojure buffers on load
-autocmd BufRead *.clj try | silent! Require | catch /^Fireplace/ | endtry
+" autocmd BufRead *.clj try | silent! Require | catch /^Fireplace/ | endtry
 
 " tagbar
-nmap <F8> :TagbarToggle<CR>
+" nmap <F8> :TagbarToggle<CR>
 
-" nerdtree
+" 侧边栏目录树(scrooloose/nerdtree)--------------------{{{
 map <F3> :NERDTreeToggle<CR>
+" }}}
 
 " ag.vim
 " 停留在当前字符串上按"\A"会在当前项目中查找该字符串
@@ -281,39 +297,8 @@ map <F3> :NERDTreeToggle<CR>
 "   \                 <bang>0)
 " nnoremap <silent> <Leader>A :Ag<CR>
 
-" vim-airline-themes
-"let g:airline_theme='molokai'
-" let g:airline_theme='gruvbox'
-" let g:airline_powerline_fonts=1
-"顶部tab显示"
-" let g:airline#extensions#tabline#enabled=0
-"打开tabline功能,方便查看Buffer和切换,省去了minibufexpl插件
-" let g:airline#extensions#tabline#buffer_nr_show = 1
-" nmap <tab> :bn<cr> "设置tab键映射"
-"let g:airline_section_z='%{strftime(\"%d/%m/%y\ -\ %H:%M\")}'
-" let g:airline_section_b='[%04l(%L),%04v][%p%%]\' %{strftime("%d/%m/%y\-\%H:%M")}'
-" let g:airline_section_z='%p%% ☰ %l/%L%v | %{strftime("%d/%m/%y-%H:%M")}'
 
-
-" vim-easy-align
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-
-" vim-action-ag
-" 使用这些特殊字符的字面意思而不是转义
-let g:vim_action_ag_escape_chars = '#%.^$*+?()[{\\|'
-" use * to search current word in normal mode
-nmap * <Plug>AgActionWord
-" " use * to search selected text in visual mode
-vmap * <Plug>AgActionVisual
-"Normal Mode
-    "gagiw to search the word
-    "gagi' to search the words inside single quotes.
-"Visual Mode
-    "gag to search the selected text
+" 自动注释(scrooloose/nerdcommenter)--------------------{{{
 
 " nerdcommenter
 " Add spaces after comment delimiters by default
@@ -332,6 +317,31 @@ let g:NERDCommentEmptyLines = 1
  let g:NERDToggleCheckAllLines = 1
 imap <C-c> <plug>NERDCommenterInsert
 nmap <C-c> <plug>NERDCommenterToggle
+" }}}
+
+" 代码格式对齐 (junegunn/vim-easy-align)--------------------{{{
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+" }}}
+
+" 查找 (Chun-Yang/vim-action-ag,haya14busa/incsearch.vim,haya14busa/incsearch-easymotion.vim)--------------------{{{
+
+" vim-action-ag
+" 使用这些特殊字符的字面意思而不是转义
+" let g:vim_action_ag_escape_chars = '#%.^$*+?()[{\\|'
+" use * to search current word in normal mode
+" nmap * <Plug>AgActionWord
+" " use * to search selected text in visual mode
+" vmap * <Plug>AgActionVisual
+"Normal Mode
+    "gagiw to search the word
+    "gagi' to search the words inside single quotes.
+"Visual Mode
+    "gag to search the selected text
+
 
 
 " incsearch-fuzzy
@@ -405,34 +415,6 @@ let g:EasyMotion_use_smartsign_us = 1
 " keep cursor column when JK motion
 let g:EasyMotion_startofline = 0
 
-" vim-repeat
-silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
-
-" vim-json
-" 不隐藏包裹json键值对的引号
-let g:vim_json_syntax_conceal = 0
-
-" undotree
-nnoremap <F5> :UndotreeToggle<cr>
-if has("persistent_undo")
-    set undodir=~/.undodir/
-    set undofile
-endif
-
-
-" " vim-gutentags
-" set tags=./.tags;,.tags
-"
-" " gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
-" let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
-"
-" " " 所生成的数据文件的名称
-" let g:gutentags_ctags_tagfile = '.tags'
-"
-" "" 将自动生成的 tags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
-" let s:vim_tags = expand('~/.cache/tags')
-" let g:gutentags_cache_dir = s:vim_tags
-
 " LeaderF
 let g:Lf_ShortcutF = '<c-p>'
 let g:Lf_ShortcutB = '<A-s>'
@@ -453,29 +435,45 @@ let g:Lf_HideHelp = 1
 let g:Lf_StlColorscheme = 'powerline'
 let g:Lf_PreviewResult = {'Function':0, 'BufTag':0}
 
-" vim-autoformat
-" noremap <F3> :Autoformat<CR>
-" let g:autoformat_verbosemode=1
+" }}}
+
+" vim-repeat
+silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
+
+" vim-json
+" 不隐藏包裹json键值对的引号
+let g:vim_json_syntax_conceal = 0
+
+" 撤销树(mbbill/undotree)--------------------{{{
+nnoremap <F5> :UndotreeToggle<cr>
+if has("persistent_undo")
+    set undodir=~/.undodir/
+    set undofile
+endif
+" }}}
 
 " vim-expand-region
 " - 号缩小选中区域
 nnoremap - <Plug>(expand_region_shrink)
 
-" google-codefmt windows下 clang-format js-beautify没法装
-" call glaive#Install()
-" Glaive codefmt plugin[mappings]
+" 代码格式化(google/vim-codefmt)--------------------{{{
+call glaive#Install()
+Glaive codefmt plugin[mappings]
 " Glaive codefmt google_java_executable="java -jar C:\Users\zodal\.vim\google-java-format-1.6-all-deps.jar"
-" augroup autoformat_settings
-"     " autocmd FileType bzl AutoFormatBuffer buildifier
-"     autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
-"     " autocmd FileType dart AutoFormatBuffer dartfmt
-"     " autocmd FileType go AutoFormatBuffer gofmt
-"     " autocmd FileType gn AutoFormatBuffer gn
-"     autocmd FileType html,css,json AutoFormatBuffer js-beautify
-"     autocmd FileType java AutoFormatBuffer google-java-format
-"     autocmd FileType python AutoFormatBuffer yapf
-"     " Alternative: autocmd FileType python AutoFormatBuffer autopep8
-" augroup END
+Glaive codefmt google_java_executable="java -jar /home/zodal/.vim/google-java-format-1.7-all-deps.jar"
+augroup autoformat_settings
+    " autocmd FileType bzl AutoFormatBuffer buildifier
+    autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
+    " autocmd FileType dart AutoFormatBuffer dartfmt
+    " autocmd FileType go AutoFormatBuffer gofmt
+    " autocmd FileType gn AutoFormatBuffer gn
+    " google-codefmt在这里有bug，且js-beautifly无法正确格式化html中的js和css
+    autocmd FileType html,css,json AutoFormatBuffer js-beautify
+    autocmd FileType java AutoFormatBuffer google-java-format
+    autocmd FileType python AutoFormatBuffer yapf
+    " Alternative: autocmd FileType python AutoFormatBuffer autopep8
+augroup END
+" }}}
 
 " vim-tmuxlike
 " nmap <c-\> <Plug>(tmuxlike-prefix)
@@ -484,7 +482,7 @@ nnoremap - <Plug>(expand_region_shrink)
 
 
 " auto-pairs
-let g:AutoPairsFlyMode = 1
+let g:AutoPairsFlyMode = 0
 let g:AutoPairsShortcutBackInsert = '<M-b>'
 
 " indentLine
