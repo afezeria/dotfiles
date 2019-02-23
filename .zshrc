@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-  export ZSH="/home/zodal/.oh-my-zsh"
+  export ZSH="/home/afezeria/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -52,7 +52,7 @@ DISABLE_AUTO_UPDATE="true"
 # "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 # or set a custom format using the strftime function format specifications,
 # see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
+ HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -62,8 +62,17 @@ DISABLE_AUTO_UPDATE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
+
+# zsh-autosuggestions 用逗号补全
+bindkey ',' autosuggest-accept
+export _ZL_CMD=t
+
+# zsh-syntax-highlighting 得放在zsh-autosuggestions后面
 plugins=(
   git
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  z.lua
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -81,7 +90,7 @@ source $ZSH/oh-my-zsh.sh
 # else
 #   export EDITOR='mvim'
 # fi
-
+export EDITOR='nvim'
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
@@ -97,12 +106,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/zodal/.sdkman"
-[[ -s "/home/zodal/.sdkman/bin/sdkman-init.sh" ]] && source "/home/zodal/.sdkman/bin/sdkman-init.sh"
-
-[[ -s /usr/share/autojump/autojump.zsh ]] && . /usr/share/autojump/autojump.zsh
-unsetopt BG_NICE
+# [[ -s /usr/share/autojump/autojump.zsh ]] && . /usr/share/autojump/autojump.zsh
+# unsetopt BG_NICE
 
 if [ -f ~/.dir_colors ]; then
     eval `dircolors ~/.dir_colors`
@@ -112,8 +117,30 @@ alias setproxy="export ALL_PROXY=socks5://127.0.0.1:1080"
 alias unsetproxy="unset ALL_PROXY"
 alias ip="curl -i http://ip.cn"
 alias python="python3"
+alias vi="nvim"
+alias ncdu="ncdu --color dark"
+alias fs="fselect"
+alias mvnrsd="proxychains4 mvn dependency:sources dependency:resolve -Dclassifier=javadoc"
+alias help="tldr"
+
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export PATH=$PATH:/opt/gradle-5.1.1/bin
-export GRADLE_HOME=/opt/gradle/gradle-5.1.1
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/afezeria/.sdkman"
+[[ -s "/home/afezeria/.sdkman/bin/sdkman-init.sh" ]] && source "/home/afezeria/.sdkman/bin/sdkman-init.sh"
+
+# colorls
+source $(dirname $(gem which colorls))/tab_complete.sh
+alias lc='colorls -lA --sd'
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+
+# z.lua
+# alias t="z"
+# export _ZL_CMD=t # 不知道为什么这行必须放在plugins前面
+alias tc="t -c"     # 严格匹配当前路径的子路径
+alias tt="t -i"     # 使用交互式选择模式
+alias tf="t -I"     # 使用 fzf 对多个结果进行选择
+alias tb="t -b"     # 快速回到父目录
+export _ZL_MATCH_MODE=1
+

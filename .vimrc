@@ -124,6 +124,7 @@ set foldmethod=marker " 设置折叠模式
 set foldcolumn=2 " 设置折叠栏宽度
 " set foldlevel=100 " 启动vim时不折叠
 set wildmenu               " 状态栏自动补全
+set nohlsearch            " 关闭搜索后高亮 
 
 " 打开vim时自动跳转到上次离开的位置
 if has("autocmd")
@@ -150,8 +151,10 @@ nnoremap Y Vy
 nnoremap P p==
 " 跳到行首
 nnoremap H ^
+vnoremap H ^
 " 跳到行尾
 nnoremap L $
+vnoremap L $
 " 退出插入模式
 inoremap jj <Esc>
 inoremap jk <Esc>
@@ -212,6 +215,10 @@ if has('win32')
   set pythonthreedll=G:\Scoop\apps\python\3.7.1\python37.dll
   set shell=cmd
   set shellcmdflag=/c
+  set guifont=Inziu\ Iosevka\ SC:h14 " 字体
+else
+  set guifont=Inziu\ Iosevka\ SC\ 16 " 字体
+  let g:python3_host_prog='/usr/bin/python3'
 endif
 
 " }}}
@@ -219,7 +226,7 @@ endif
 " 根据文件类型加载具体配置文件 ----------------------- {{{
 
 autocmd FileType html set iskeyword=@,48-57,_,192-255,58,-,$
-autocmd FileType java source ~/.vim/java.vim
+autocmd FileType java source ~/.java.vim
 " autocmd! FileType java iabbrev psvm public static void main(String[] args){<Enter>}<esc>ka
 " autocmd VimEnter * source ~/.vim/command.vim
 command! WQ wq
@@ -459,8 +466,7 @@ nnoremap - <Plug>(expand_region_shrink)
 " 代码格式化(google/vim-codefmt)--------------------{{{
 call glaive#Install()
 Glaive codefmt plugin[mappings]
-" Glaive codefmt google_java_executable="java -jar C:\Users\zodal\.vim\google-java-format-1.6-all-deps.jar"
-Glaive codefmt google_java_executable="java -jar /home/zodal/.vim/google-java-format-1.7-all-deps.jar"
+Glaive codefmt google_java_executable="java -jar /home/afezeria/.vim/google-java-format-1.7-all-deps.jar"
 augroup autoformat_settings
     " autocmd FileType bzl AutoFormatBuffer buildifier
     autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
@@ -479,11 +485,13 @@ augroup END
 " nmap <c-\> <Plug>(tmuxlike-prefix)
 " nmap <Leader><Leader> <Plug>(tmuxlike-prefix)
 
-
-
 " auto-pairs
-let g:AutoPairsFlyMode = 0
-let g:AutoPairsShortcutBackInsert = '<M-b>'
+if has('nvim')||has('gui')
+  let g:AutoPairsFlyMode = 1
+  let g:AutoPairsShortcutBackInsert = '<M-b>'
+else
+  let g:AutoPairsFlyMode = 0
+end
 
 " indentLine
 let g:indentLine_setColors = 0

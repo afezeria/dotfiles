@@ -1,0 +1,66 @@
+" set keep-english-in-normal-and-restore-in-insert
+set keep-english-in-normal
+set nohlsearch
+set incsearch
+set ignorecase
+set smartcase
+set showmode
+set number
+set relativenumber
+set scrolloff=7
+set history=100000
+
+
+let mapleader=","
+noremap <leader>k gt
+noremap <leader>j gT
+" noremap <leader>h :action Back<CR>
+" noremap <leader>l :action Forward<CR>
+noremap <leader>v :action VimVisualToggleBlockMode<CR>
+noremap <leader>fs :action FileStructurePopup<CR>
+ 
+noremap <leader>ga :action GotoAction<CR>
+noremap <leader>gc :action GotoClass<CR>
+noremap <leader>gd :action GotoDeclaration<CR>
+noremap <leader>gi :action GotoImplementation<CR>
+noremap <leader>gs :action GotoSuperMethod<CR>
+noremap <leader>gt :action GotoTest<CR>
+ 
+" Window operation
+nnoremap <leader>ww <C-W>w
+nnoremap <leader>wd <C-W>c
+nnoremap <leader>wj <C-W>j
+nnoremap <leader>wk <C-W>k
+nnoremap <leader>wh <C-W>h
+nnoremap <leader>wl <C-W>l
+nnoremap <leader>w9 <C-W>=
+nnoremap <leader>ws <C-W>s
+nnoremap <leader>w- <C-W>s
+nnoremap <leader>wv <C-W>v
+nnoremap <leader>w\\ <C-W>v
+
+" Quit visual mode
+vnoremap v <Esc>
+
+" Yank to the end of line
+" nnoremap Y 0y$
+nnoremap Y Vy
+
+" Auto indent pasted text
+nnoremap P p==
+
+" Move to the start of line
+nnoremap H ^
+
+" Move to the end of line
+nnoremap L $
+
+" Quit insert mode
+inoremap jj <Esc>
+inoremap jk <Esc>
+inoremap kk <Esc>
+
+
+nmap / :action KJumpAction<cr>
+nmap <leader>s :action KJumpAction.Word0<cr>
+nmap <leader>l :action KJumpAction.Line<cr>
