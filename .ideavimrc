@@ -7,15 +7,21 @@ set smartcase
 set showmode
 set number
 set relativenumber
-set scrolloff=7
+set scrolloff=3
+set clipboard=unnamedplus,unnamed
 set history=100000
+set surround
 
 
-let mapleader=","
-noremap <leader>k gt
-noremap <leader>j gT
-" noremap <leader>h :action Back<CR>
-" noremap <leader>l :action Forward<CR>
+" let mapleader=","
+let mapleader=" "
+" let mapleader="<space>"
+" 左右跳转标签
+noremap <leader>l gt
+noremap <leader>h gT
+
+noremap <leader>b :action Back<CR>
+noremap <leader>f :action Forward<CR>
 noremap <leader>v :action VimVisualToggleBlockMode<CR>
 noremap <leader>fs :action FileStructurePopup<CR>
  
@@ -39,6 +45,10 @@ nnoremap <leader>w- <C-W>s
 nnoremap <leader>wv <C-W>v
 nnoremap <leader>w\\ <C-W>v
 
+nnoremap za zo
+nnoremap zr zR
+nnoremap zm zM
+
 " Quit visual mode
 vnoremap v <Esc>
 
@@ -51,16 +61,23 @@ nnoremap P p==
 
 " Move to the start of line
 nnoremap H ^
+vnoremap H ^
 
 " Move to the end of line
 nnoremap L $
+vnoremap L $
+
+" These create newlines like o and O but stay in normal mode
+nmap zj o<Esc>k
+nmap zk O<Esc>j
 
 " Quit insert mode
 inoremap jj <Esc>
 inoremap jk <Esc>
+inoremap kj <Esc>
 inoremap kk <Esc>
 
 
 nmap / :action KJumpAction<cr>
 nmap <leader>s :action KJumpAction.Word0<cr>
-nmap <leader>l :action KJumpAction.Line<cr>
+" nmap <leader>l :action KJumpAction.Line<cr>
