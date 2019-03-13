@@ -68,8 +68,8 @@ nnoremap L $
 vnoremap L $
 
 " These create newlines like o and O but stay in normal mode
-nmap zj o<Esc>k
-nmap zk O<Esc>j
+nnoremap zj O<Esc>j
+nnoremap zk o<Esc>k
 
 " Quit insert mode
 inoremap jj <Esc>
@@ -79,5 +79,6 @@ inoremap kk <Esc>
 
 
 nmap / :action KJumpAction<cr>
-nmap <leader>s :action KJumpAction.Word0<cr>
+nmap <leader><leader>s :action KJumpAction<cr>
+nmap <leader><leader>w :action KJumpAction.Word0<cr>
 " nmap <leader>l :action KJumpAction.Line<cr>
